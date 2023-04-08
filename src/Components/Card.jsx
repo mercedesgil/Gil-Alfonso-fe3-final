@@ -1,47 +1,39 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { useContextGlobal } from "./utils/global.context";
-import Doctor from "../images/doctor.jpg";
+import { ContextGlobal } from "./utils/global.context";
+import doctor from "./public/images/doctor.jpg"
 
-const Card = ({ od }) => {
-  const{theme}= useContextGlobal()
-  const addFav = () => {
+
+const Card = ({ name, username, id }) => {
+
+  const {data, setData} = useContext(ContextGlobal)
+
+  const addFav = (dentistName, dentistUserName, dentistId)=>{
     // Aqui iria la logica para agregar la Card en el localStorage
 
-    const odontologos = JSON.parse(localStorage.getItem("odontologos") || "[]");
-    const odontologo = {
-      id: od.id,
-      name: od.name,
-      username: od.username,
-    };
-    odontologos.push(odontologo);
-    localStorage.setItem("odontologos", JSON.stringify(odontologos));
-    alert("se ha añadido a favoritos")
-  };
+    if (data.filter(dentist => dentist.id === dentistId).length > 0){
+      setData((previousState)=> previousState.filter(dentist => dentist.id !== dentistId))
+      return
+    }
+    setData((previousState)=>
+    previousState.length === 0? [{name: dentistName, username: dentistUserName, id: dentistId}]:
+    [...previousState, {name: dentistName, username: dentistUserName, id: dentistId}] 
+    )
+  }
+
   return (
-    <div className={theme.className}>
-      <div className="card">
-        <Link to={"/detail/" + od.id}>
-          <h4>{od.name}</h4>
-        </Link>
-        <img className="doctor" src={Doctor} alt="" />
-        <h5>{od.username}</h5>
-        <p>ID {od.id}</p>
-
+    <div className="card">
+      <Link to={`detail/${id}`}>
         {/* En cada card deberan mostrar en name - username y el id */}
-
+        <img src={doctor} alt={name} width='180px' />
+        <h2>{name}</h2>
+        <h3>User: {username}</h3>
+        <h3>ID: {id}</h3>
         {/* No debes olvidar que la Card a su vez servira como Link hacia la pagina de detalle */}
 
         {/* Ademas deberan integrar la logica para guardar cada Card en el localStorage */}
-        <button
-          onClick={(e) => {
-            addFav();
-          }}
-          className="favButton"
-        >
-          &#128150;
-        </button>
-      </div>
+        </Link>
+        <button onClick={() => addFav(name, username, id)} className="favButton">Add fav</button>
     </div>
   );
 };
