@@ -7,18 +7,16 @@ import { useContextGlobal } from '../Components/utils/global.context'
 
 const Home = () => {
 
-  const {odontologos} = useContextGlobal()
-  
+  //const {odontologos} = useContextGlobal()
+  //1.hacer llamado API utilizando useefect axios 
+  //2.guardar en context (tiene que tener una funciona que me ayude a guardar datos en el context se )
+  //3. Dentro de home usamos el context y recuperamos el listado de odontologos array
+  //4. en adontologos.map recorro el array y muestro las tarjetas
+
   return (
     <main className="" >
       <h1>Home</h1>
-      <div className='card-grid'>
 
-      {odontologos.map((od) => 
-        <Card key ={od.id} /*name={od.name} username={od.username} id = {od.id} */ od={od}  />
-        )}
-
-      </div>
     </main>
   )
 }

@@ -9,7 +9,8 @@ const Footer = () => {
   return (
     <footer>
       <div>
-        <img src={DH} alt="DH-logo" />
+        <p>Powered by</p>
+        <img src="./images/DH.png" alt="DH-logo" />
       </div>
       <div className="icon">
         <img src={Facebook} alt="Facebook" className="icon" />
