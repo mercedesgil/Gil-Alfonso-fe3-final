@@ -1,18 +1,31 @@
-import React, { useState } from 'react'
+import Favs from "./Routes/Favs";
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar";
-import Card from './Components/Card';
-
-
-
+import Detail from "./Routes/Detail";
+import Home from "./Routes/Home";
+import Contact from "./Routes/Contact";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ContextProvider } from "./Components/utils/global.context";
 
 function App() {
   return (
-      <div className="App">
-          <Navbar/>
-          <Footer/>
+    <div className="App">
+      <ContextProvider>
+        <BrowserRouter>
+          <Navbar />
+
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/detail/:id" element={<Detail />} />
+            <Route path="/favorites" element={<Favs />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+
           
-      </div>
+        </BrowserRouter>
+        <Footer />
+      </ContextProvider>
+    </div>
   );
 }
 

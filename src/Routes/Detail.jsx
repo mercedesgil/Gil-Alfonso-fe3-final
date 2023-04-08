@@ -1,45 +1,38 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useParams, } from 'react-router-dom'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 
 //Este componente debera ser estilado como "dark" o "light" dependiendo del theme del Context
 
 const Detail = () => {
-    let {odontologoid}= useParams()
-    const [odonto, setOdonto] = useState([])
-    useEffect(() => {
-      axios.get(`https://jsonplaceholder.typicode.com/users/${odontologoid}`)
-      .then (res => setOdonto(res.data))
-      .catch(err=> console.log(err))
-    
-      
-    }, [])
-    
-
  
   // Consumiendo el parametro dinamico de la URL deberan hacer un fetch a un user en especifico
+const [singleDentist, setSingleDentist] = useState({})
+const paramsForDentist = useParams()
+
+const getSingleDentist = async() =>{
+  const data = await fetch('https://jsonplaceholder.typicode.com/users/' + paramsForDentist.id)
+  .then((response)=> {
+    return response.json()
+  })
+  setSingleDentist(data)
+}
+
+useEffect(()=> {
+  getSingleDentist()
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [])
 
   return (
     <>
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Website</th>
-      </tr>
-      <tr>
-        <td>{odonto.name}</td>
-        <td>{odonto.email}</td>
-        <td>{odonto.phone}</td>
-        <td>{odonto.website}</td>
-      </tr>
-      
-    </table>
-     
+      <h1>Detail Dentist id </h1>
       {/* aqui deberan renderizar la informacion en detalle de un user en especifico */}
       {/* Deberan mostrar el name - email - phone - website por cada user en especifico */}
+      <p>Name Dentist: {singleDentist.name}</p>
+      <p>Email: {singleDentist.email}</p>
+      <p>Phone number: {singleDentist.phone}</p>
+      <p>Web Site: {singleDentist.website}</p>
     </>
   )
 }

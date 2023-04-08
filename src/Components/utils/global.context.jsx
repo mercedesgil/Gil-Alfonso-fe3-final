@@ -1,52 +1,38 @@
-import { useContext } from "react";
-import { createContext, useState } from "react";
-import axios from "axios"
-import { useEffect } from "react";
+import { createContext, useMemo, useState } from "react";
 
-export const initialState = {themes:{
-  light:{
-    className:""
-  },
-  dark:{
-    className:"dark"
-  }
-}}
+export const initialState = {theme: "light", data: []}
 
-export const ContextGlobal = createContext(undefined);
- 
+export const ContextGlobal = createContext(initialState);
 
- const ContextProvider = ({ children }) => {
+
+
+export const ContextProvider = ({ children }) => {
   //Aqui deberan implementar la logica propia del Context, utilizando el hook useMemo
-  const [odontologos, setOdontologos] = useState([])
-  const [theme, setTheme] = useState(initialState.themes.light)
-  const handleChangeTheme = () => {
-    if (theme === initialState.themes.light) {
-      setTheme(initialState.themes.dark);
-    } else {
-      setTheme(initialState.themes.light);
+
+  const [theme, setTheme] = useState(initialState.theme)
+  const [data, setData] = useState(initialState.data)
+  
+  // const changeTheme = useMemo(() => {
+      
+  // })
+  
+
+
+  const anotherData = useMemo(()=>{
+    const getDentists = async() => {
+      const dataFetched = await fetch('https://jsonplaceholder.typicode.com/users')
+      .then((response) => {
+        return response.json()
+      })
+      return(dataFetched)
     }
-  };
+    localStorage.setItem('favoritesDentists', JSON.stringify(data))
+    return {getDentists, theme, data, setTheme, setData}
+  }, [theme, data])
   
-
-  useEffect(() => {
-    axios.get("https://jsonplaceholder.typicode.com/users")
-  .then(res => setOdontologos(res.data))
-  .catch(err => console.log(err))
-  
-   
-  }, [])
-  
-
-  
-
   return (
-    <ContextGlobal.Provider value={{odontologos, theme, setTheme, handleChangeTheme}}>
+    <ContextGlobal.Provider value={anotherData}>
       {children}
     </ContextGlobal.Provider>
   );
 };
-export default ContextProvider
-
-export const useContextGlobal = ()=>{
-  return useContext(ContextGlobal)
-}
